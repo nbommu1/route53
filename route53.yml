@@ -1,0 +1,15 @@
+---
+ - hosts: foo
+   user: ansible
+   tasks:
+     - name: Creating DNS records in route53
+       local_action: route53
+                command=create
+                zone=foo.com
+                record={{hostvars[item].ansible_hostname}}.foo.com
+                type=A
+                ttl=7200
+                value={{ hostvars[item].ansible_default_ipv4.address }}
+                ec2_access_key=<Access key>
+                ec2_secret_key=<Secret Key>
+       with_items: groups['<groupname>']
